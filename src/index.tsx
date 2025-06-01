@@ -1,9 +1,9 @@
 import { createRoot } from 'react-dom/client';
-import { StrictMode, CSSProperties } from 'react';
+import { StrictMode, CSSProperties, useState } from 'react';
 import clsx from 'clsx';
+import Form from './components/article-params-form/index';
 
 import { Article } from './components/article/Article';
-import { ArticleParamsForm } from './components/article-params-form/ArticleParamsForm';
 import { defaultArticleState } from './constants/articleProps';
 
 import './styles/index.scss';
@@ -13,19 +13,25 @@ const domNode = document.getElementById('root') as HTMLDivElement;
 const root = createRoot(domNode);
 
 const App = () => {
+	const [articleSettings, setArticleSettings] = useState(defaultArticleState);
+
+	const handleSettingsChange = (newSettings: typeof defaultArticleState) => {
+		setArticleSettings(newSettings);
+	};
+
 	return (
 		<main
 			className={clsx(styles.main)}
 			style={
 				{
-					'--font-family': defaultArticleState.fontFamilyOption.value,
-					'--font-size': defaultArticleState.fontSizeOption.value,
-					'--font-color': defaultArticleState.fontColor.value,
-					'--container-width': defaultArticleState.contentWidth.value,
-					'--bg-color': defaultArticleState.backgroundColor.value,
+					'--font-family': articleSettings.fontFamilyOption.value,
+					'--font-size': articleSettings.fontSizeOption.value,
+					'--font-color': articleSettings.fontColor.value,
+					'--container-width': articleSettings.contentWidth.value,
+					'--bg-color': articleSettings.backgroundColor.value,
 				} as CSSProperties
 			}>
-			<ArticleParamsForm />
+			<Form onApply={handleSettingsChange} />
 			<Article />
 		</main>
 	);
